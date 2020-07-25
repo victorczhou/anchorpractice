@@ -2,16 +2,46 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Testing</title>
+		<title>three.js test</title>
 		<style>
-			body { margin: 0; }
-			canvas { display: block; }
+			body {
+				margin: 0;
+			}
+			canvas {
+				background: red;
+			}
 		</style>
 	</head>
 	<body>
+
+		<canvas id="mycanvas"></canvas>
+
 		<script src="js/three.js"></script>
 		<script>
-			// Our Javascript will go here.
+			var renderer = new THREE.WebGLRenderer({canvas: document.getElementById("mycanvas"), antialias: true});
+			renderer.setClearColor(0xb2b5b2);
+			renderer.setSize(window.innerWidth, window.innerHeight);
+
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight, 0.1, 3000);
+			var amblight = new THREE.AmbientLight(0xffffff, 0.5);
+			scene.add(amblight);
+			var plight = new THREE.PointLight(0xffffff, 0.5);
+			scene.add(plight);
+
+			var geometry = new THREE.BoxGeometry(100, 100, 100);
+			var material = new THREE.MeshLambertMaterial({color: 0xfdd9b5});
+			var mesh = new THREE.Mesh(geometry, material);
+			mesh.position.set(0, 0, -1000);
+			scene.add(mesh)
+
+			requestAnimationFrame(render);
+			function render(){
+				mesh.rotation.x += 0.05;
+				mesh.rotation.y += 0.05;
+				renderer.render(scene, camera);
+				requestAnimationFrame(render);
+			}
 		</script>
 	</body>
 </html>
